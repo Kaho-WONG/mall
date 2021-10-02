@@ -25,6 +25,20 @@
     from mall_product
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByCategoryIdSet" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_product
+    where status = 1
+    <if test="categoryIdSet.size() > 0">
+      and category_id in
+      <foreach collection="categoryIdSet" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mall_product
     where id = #{id,jdbcType=INTEGER}

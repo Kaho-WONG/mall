@@ -22,7 +22,7 @@
     from mall_user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <!--以下两个是后面加的，用于注册用户时的信息校验-->
+  <!--用于注册用户时的信息校验-->
   <!--注意不要把Username写成UserName，要和数据库对应-->
   <select id="countByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
     select
@@ -35,6 +35,13 @@
     count(1)
     from mall_user
     where email = #{email,jdbcType=VARCHAR}
+  </select>
+  <!--用于登录用户时的信息校验-->
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_user
+    where username = #{username,jdbcType=VARCHAR}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

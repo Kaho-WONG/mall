@@ -29,7 +29,7 @@ public class UserServiceImpl implements IUserService {
      * @param user 传入的user有username,password,email,role属性
      */
     @Override
-    public ResponseVo register(User user) {
+    public ResponseVo<User> register(User user) {
 
         //校验传入信息是否合法
         //username不能重复
@@ -51,10 +51,35 @@ public class UserServiceImpl implements IUserService {
 
         //将信息写入数据库
         int resultCount = userMapper.insertSelective(user);
-        if (resultCount == 0){ //写入数据库时出错，服务端原因
+        if (resultCount == 0){ //写入数据库时出错，服务端错误
             return ResponseVo.error(ResponseEnum.ERROR);
         }
 
         return ResponseVo.success();//若上述都没出错，则返回成功
+    }
+
+    /**
+     * 登录功能的实现
+     * @param username 用户名
+     * @param password 密码
+     * @return
+     */
+    @Override
+    public ResponseVo<User> login(String username, String password) {
+        User user = userMapper.selectByUsername(username);//根据给定用户名在数据库中查找这个user
+        if (user == null){
+            //用户不存在(返回:用户名或密码错误)
+            return ResponseVo.error(ResponseEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+
+        if (!user.getPassword().equalsIgnoreCase(
+                DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)))) {
+            //密码错误(返回:用户名或密码错误)
+            return ResponseVo.error(ResponseEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+
+        //程序如果能运行到这，证明数据库确实有此用户且密码正确
+        user.setPassword("");//先将这个用户对象密码置空串，防止将数据库中存储的用户密码设进了Session中
+        return ResponseVo.success(user); //这里传入user用于之后在controller中设置session
     }
 }

@@ -20,6 +20,6 @@ public class CategoryVo {
 
     private Integer sortOrder;
 
-    private List<CategoryVo> subCategories;
+    private List<CategoryVo> subCategories;//子类目
 
 }

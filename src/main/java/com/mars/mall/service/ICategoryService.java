@@ -4,6 +4,7 @@ import com.mars.mall.vo.CategoryVo;
 import com.mars.mall.vo.ResponseVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @description:
@@ -13,4 +14,6 @@ import java.util.List;
 public interface ICategoryService {
 
     ResponseVo<List<CategoryVo>> selectAll();//查询所有的类目
+
+    void findSubCategoryId(Integer id, Set<Integer> resultSet);
 }

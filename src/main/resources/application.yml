@@ -14,3 +14,7 @@ mybatis:
 #logging:
 #  pattern:
 #    console: "[%thread] %-5level %logger{36} - %msg%n"
+#server:
+#  servlet:
+#    session:
+#      timeout: 120 #设置session过期时间为120秒，默认最低限制是一分钟

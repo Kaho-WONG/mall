@@ -37,7 +37,7 @@ public class ResponseVo<T> {
     }
 
     //成功，携带文字信息
-    public static <T> ResponseVo<T> success(String msg) {
+    public static <T> ResponseVo<T> successByMsg(String msg) {
         return new ResponseVo<>(ResponseEnum.SUCCESS.getCode(),msg);
     }
     //成功，携带数据
