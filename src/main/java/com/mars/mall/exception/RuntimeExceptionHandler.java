@@ -2,9 +2,13 @@ package com.mars.mall.exception;
 
 import com.mars.mall.enums.ResponseEnum;
 import com.mars.mall.vo.ResponseVo;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Objects;
 
 /**
  * @description: 基于AOP的对Controller层的异常处理类，用于处理突发的非客户人为的异常
@@ -30,5 +34,20 @@ public class RuntimeExceptionHandler {
     @ResponseBody
     public ResponseVo userLoginHandle() {
         return ResponseVo.error(ResponseEnum.NEED_LOGIN);//返回用户未登录的error对象
+    }
+
+    /**
+     * 统一处理用户传入参数错误
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseVo notValidExceptionHandle(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        Objects.requireNonNull(bindingResult.getFieldError());
+        return ResponseVo.error(ResponseEnum.PARAM_ERROR,
+                bindingResult.getFieldError().getField() + " "
+                        + bindingResult.getFieldError().getDefaultMessage());
     }
 }

@@ -4,6 +4,9 @@ spring:
     username: root
     password: wjh1316156936
     url: jdbc:mysql://localhost:3306/mall_db?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+  redis:
+    host: 127.0.0.1
+    port: 6379
 mybatis:
   configuration:
     map-underscore-to-camel-case: true #匹配数据库字段和pojo类属性
