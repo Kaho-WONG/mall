@@ -6,9 +6,11 @@ import java.util.Date;
 
 /**
  * 收货地址类 —— 收货地址表
+ * 因为和vo对象所需的属性一样，所以就不再为此专门新建一个vo类了
  */
 @Data
 public class Shipping {
+
     private Integer id;
 
     private Integer userId;//用户id

@@ -25,10 +25,24 @@
     from mall_shipping
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!--通过用户id来查找其所有的收货地址-->
+  <select id="selectByUid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_shipping
+    where user_id = #{uid,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mall_shipping
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <!--通过用户id和地址id来删除某条收货地址-->
+  <delete id="deleteByIdAndUid" parameterType="map">
+    delete from mall_shipping
+    where id = #{shippingId,jdbcType=INTEGER}
+    and user_id = #{uid,jdbcType=INTEGER}
+  </delete>
+
   <insert id="insert" parameterType="com.mars.mall.pojo.Shipping">
     insert into mall_shipping (id, user_id, receiver_name, 
       receiver_phone, receiver_mobile, receiver_province, 
@@ -41,7 +55,7 @@
       #{receiverZip,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.mars.mall.pojo.Shipping">
+  <insert id="insertSelective" parameterType="com.mars.mall.pojo.Shipping" useGeneratedKeys="true" keyProperty="id">
     insert into mall_shipping
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -112,12 +126,6 @@
       <if test="receiverZip != null">
         #{receiverZip,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.mars.mall.pojo.Shipping">
@@ -149,12 +157,6 @@
       </if>
       <if test="receiverZip != null">
         receiver_zip = #{receiverZip,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
