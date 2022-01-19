@@ -35,7 +35,7 @@
 
 **表关系示意图：**
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632537720541.png" alt="1632537720541" style="zoom: 50%;" />
+<img src="./imgs/1632537720541.png" alt="1632537720541" style="zoom: 50%;" />
 
 
 
@@ -181,13 +181,13 @@ CREATE TABLE `mall_shipping`(
 
 **唯一索引**
 
-![1632542444122](D:\JavaEnvironment\Git\workspace\mall\imgs\1632542444122.png)
+![1632542444122](./imgs/1632542444122.png)
 
 **单索引及组合索引**
 
 通过 B+ 树提高针对特定字段的查询速度。
 
-![1632542483974](D:\JavaEnvironment\Git\workspace\mall\imgs\1632542483974.png)
+![1632542483974](./imgs/1632542483974.png)
 
 **时间戳**
 
@@ -401,7 +401,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 将以上 mall.sql 粘贴到数据库软件（SQLyog）中执行，建表成功如图：
 
-![1632543228098](D:\JavaEnvironment\Git\workspace\mall\imgs\1632543228098.png)
+![1632543228098](./imgs/1632543228098.png)
 
 
 
@@ -409,7 +409,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 创建SpringBoot项目有如下三种创建方法：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632543486783.png" alt="1632543486783" style="zoom:33%;" />
+<img src="./imgs/1632543486783.png" alt="1632543486783" style="zoom:33%;" />
 
 推荐使用第一种，找不到需要的 2.1.7 版本可以先用最新的版本，等工程构建好后进入pom.xml文件把`spring-boot-starter-parent`的版本改成`2.1.7.RELEASE` 。
 
@@ -417,7 +417,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 初始化后生成项目结构：
 
-![1632549184381](D:\JavaEnvironment\Git\workspace\mall\imgs\1632549184381.png)
+![1632549184381](./imgs/1632549184381.png)
 
 下面是初始的 pom.xml 文件：
 
@@ -473,7 +473,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 **MallApplication.java：**
 
-![1632549516205](D:\JavaEnvironment\Git\workspace\mall\imgs\1632549516205.png)
+![1632549516205](./imgs/1632549516205.png)
 
 然后进入test目录下的MallApplicationTests，将里面的 import 改成：`import org.junit.Test;`
 
@@ -485,7 +485,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 现在启动项目：
 
-![1632549344466](D:\JavaEnvironment\Git\workspace\mall\imgs\1632549344466.png)
+![1632549344466](./imgs/1632549344466.png)
 
 到这里项目初步构建成功~~~
 
@@ -515,7 +515,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 **将工程原本自带的 application.properties 文件修改成 application.yml 格式**，这是目前更为主流的一种配置方式。
 
-![1642586967327](D:\JavaEnvironment\Git\workspace\mall\imgs\1642586967327.png)
+![1642586967327](./imgs/1642586967327.png)
 
 
 
@@ -629,7 +629,7 @@ public class MallApplicationTests {
 
 运行测试类，查询到结果：
 
-![1632554255645](D:\JavaEnvironment\Git\workspace\mall\imgs\1632554255645.png)
+![1632554255645](./imgs/1632554255645.png)
 
 则项目能够连接上mysql使用mybatis完成dao层的功能~
 
@@ -659,17 +659,17 @@ Category{id=100001, parentId=0, name='家用电器', status=1, sortOrder=null, c
 
 如果每张表的Mapper接口都要加上 `@Mapper` 是不是会有点麻烦呢？
 
-![1632554820569](D:\JavaEnvironment\Git\workspace\mall\imgs\1632554820569.png)
+![1632554820569](./imgs/1632554820569.png)
 
 其实可以将 Mapper 接口上的注解去掉，然后在SpringBoot主类上加上 `@MapperScan(basePackages = "com.mars.mall.dao")`，这样便可以为`com.mars.mall.dao` 包下的所有 Mapper 接口在容器中自动创建对应的mapper实例：
 
-![1632555042372](D:\JavaEnvironment\Git\workspace\mall\imgs\1632555042372.png)
+![1632555042372](./imgs/1632555042372.png)
 
-![1632555110171](D:\JavaEnvironment\Git\workspace\mall\imgs\1632555110171.png)
+![1632555110171](./imgs/1632555110171.png)
 
 程序照样可以执行成功。这样便省去了在每一个 Mapper 接口上声明 `@Mapper` 注解的麻烦了。但是要注意，这可能会使程序某处爆红（出错），但不影响结果：
 
-![1632556675839](D:\JavaEnvironment\Git\workspace\mall\imgs\1632556675839.png)
+![1632556675839](./imgs/1632556675839.png)
 
 
 
@@ -693,7 +693,7 @@ Category{id=100001, parentId=0, name='家用电器', status=1, sortOrder=null, c
 
 进入**settings——editor——general——auto import**，勾选这两项
 
-![1632555581811](D:\JavaEnvironment\Git\workspace\mall\imgs\1632555581811.png)
+![1632555581811](./imgs/1632555581811.png)
 
 > 只有一个的包会自动导入，但存在多个同名的包需要自己手动选择
 
@@ -705,15 +705,15 @@ Category{id=100001, parentId=0, name='家用电器', status=1, sortOrder=null, c
 
 1. 首先，将之前pojo类 Category 中编写的 get、set、tostring 全部删掉：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632555898749.png" alt="1632555898749" style="zoom:67%;" />
+<img src="./imgs/1632555898749.png" alt="1632555898749" style="zoom:67%;" />
 
 2. 在 pom.xml 中引入lombok依赖：
 
-![1632555994696](D:\JavaEnvironment\Git\workspace\mall\imgs\1632555994696.png)
+![1632555994696](./imgs/1632555994696.png)
 
 3. 再在IEDA插件市场下载lombok插件，但是我发现 IDEA 2021.1 的插件市场找不到 lombok 插件，但是能使用 lombok 的功能，只要在使用其注解的时候导入lombok的包就能使用，如图：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632556703655.png" alt="1632556703655" style="zoom:67%;" />
+<img src="./imgs/1632556703655.png" alt="1632556703655" style="zoom:67%;" />
 
 
 
@@ -731,11 +731,11 @@ logging:
 
 首先，在resources包下创建一个mappers包，新建一个mapper文件：
 
-![1632558601148](D:\JavaEnvironment\Git\workspace\mall\imgs\1632558601148.png)
+![1632558601148](./imgs/1632558601148.png)
 
 > 要注意，如果该mapper文件创建在与dao同个包下，则不需要特别告知程序这个文件的位置，而因为我将这个文件放在了resourses下，所以需要特别在配置文件application.yml下进行配置：（否则会报错）
 
-![1632558628335](D:\JavaEnvironment\Git\workspace\mall\imgs\1632558628335.png)
+![1632558628335](./imgs/1632558628335.png)
 
 这样程序才能找到mapper.xml文件。
 
@@ -743,7 +743,7 @@ logging:
 
 编写mapper方法：
 
-![1632557922680](D:\JavaEnvironment\Git\workspace\mall\imgs\1632557922680.png)
+![1632557922680](./imgs/1632557922680.png)
 
 ### 3. 编写 mapper.xml 文件
 
@@ -773,9 +773,9 @@ logging:
 
 接下来就可以运行了，编写测试方法并测试：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632558016822.png" alt="1632558016822" style="zoom:67%;" />
+<img src="./imgs/1632558016822.png" alt="1632558016822" style="zoom:67%;" />
 
-![1632558033103](D:\JavaEnvironment\Git\workspace\mall\imgs\1632558033103.png)
+![1632558033103](./imgs/1632558033103.png)
 
 
 
@@ -783,15 +783,15 @@ logging:
 
 首先在要进行测试的类的空白处右击并选择生成Test（Ctrl + Shift + T）：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632558841639.png" alt="1632558841639" style="zoom: 80%;" />
+<img src="./imgs/1632558841639.png" alt="1632558841639" style="zoom: 80%;" />
 
 进行相关配置：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632558911437.png" alt="1632558911437" style="zoom: 67%;" />
+<img src="./imgs/1632558911437.png" alt="1632558911437" style="zoom: 67%;" />
 
 便自动在test包下生成了对应的test类：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632558994012.png" alt="1632558994012" style="zoom: 67%;" />
+<img src="./imgs/1632558994012.png" alt="1632558994012" style="zoom: 67%;" />
 
 
 
@@ -799,15 +799,15 @@ logging:
 
 原测试类清空：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632559514881.png" alt="1632559514881" style="zoom:67%;" />
+<img src="./imgs/1632559514881.png" alt="1632559514881" style="zoom:67%;" />
 
 单一模块测试类：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632559571072.png" alt="1632559571072" style="zoom:67%;" />
+<img src="./imgs/1632559571072.png" alt="1632559571072" style="zoom:67%;" />
 
 运行正常：
 
-![1632559588087](D:\JavaEnvironment\Git\workspace\mall\imgs\1632559588087.png)
+![1632559588087](./imgs/1632559588087.png)
 
 
 
@@ -827,11 +827,11 @@ logging:
 
 在 pom.xml 中添加插件：
 
-![1632561146622](D:\JavaEnvironment\Git\workspace\mall\imgs\1632561146622.png)
+![1632561146622](./imgs/1632561146622.png)
 
 在终端中输入命令：
 
-![1632561358602](D:\JavaEnvironment\Git\workspace\mall\imgs\1632561358602.png)
+![1632561358602](./imgs/1632561358602.png)
 
 因为终端提示 `在mall\src\main\resources目录下generatorConfig.xml文件不存在`，所以要先把这个文件创建了：
 
@@ -1195,11 +1195,11 @@ logging:
 
 随后在终端重新输入刚刚的命令 `mvn mybatis-generator:generate`：
 
-![1632568584034](D:\JavaEnvironment\Git\workspace\mall\imgs\1632568584034.png)
+![1632568584034](./imgs/1632568584034.png)
 
 运行成功后，查看项目目录，可以看到各个模块的pojo、dao以及mappers下的mapper.xml文件都已经自动生成了：
 
-![1632569731158](D:\JavaEnvironment\Git\workspace\mall\imgs\1632569731158.png)
+![1632569731158](./imgs/1632569731158.png)
 
 **最后的一点收尾工作是把生成的所有 pojo 类中的 get、set方法都删掉，全部换成 @data 注解**
 
@@ -1207,7 +1207,7 @@ logging:
 
 **注意：**采用 `Ctrl + Shift + T` 自动生成的所有测试类都是没有自动继承基测试类MallApplicationTests的，所以每个测试类都要记得加上继承MallApplicationTests，不然没法得到@RunWith(SpringRunner.class)、@SpringBootTest两个注解，会报空指针异常。
 
-![1632569820177](D:\JavaEnvironment\Git\workspace\mall\imgs\1632569820177.png)
+![1632569820177](./imgs/1632569820177.png)
 
 
 
@@ -1217,9 +1217,9 @@ logging:
 
 遗憾的是这个插件我的idea插件市场找不到，随意找了另外一款插件 `free mybatis plugin`，幸运的是这款也可以用，效果如下：
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1632585820834.png" alt="1632585820834" style="zoom:67%;" />
+<img src="./imgs/1632585820834.png" alt="1632585820834" style="zoom:67%;" />
 
-![1632585838450](D:\JavaEnvironment\Git\workspace\mall\imgs\1632585838450.png)
+![1632585838450](./imgs/1632585838450.png)
 
 
 
@@ -1233,7 +1233,7 @@ logging:
 
 ### 1. 下单到支付流程剖析
 
-<img src="D:\JavaEnvironment\Git\workspace\mall\imgs\1640325590012.png" alt="1640325590012" style="zoom:50%;" />
+<img src="./imgs/1640325590012.png" alt="1640325590012" style="zoom:50%;" />
 
 
 
@@ -1295,11 +1295,11 @@ openid（微信）：公众号和小程序支付需要，appid不同，则获取
 
 Controller接收参数时，前端如果发来的是url格式请求，controller方法的接收参数应该使用@RequestParam注解：
 
-![1632718750295](D:\JavaEnvironment\Git\workspace\mall\imgs\1632718750295.png)
+![1632718750295](./imgs/1632718750295.png)
 
 前端如果发来的是json格式的请求，controller方法的接收参数应该使用@RequestBody：
 
-![1632718863341](D:\JavaEnvironment\Git\workspace\mall\imgs\1632718863341.png)
+![1632718863341](./imgs/1632718863341.png)
 
 
 
@@ -1329,7 +1329,7 @@ localhost是域名，127.0.0.1是ip地址
 
 要想在插入一条新地址条目进数据库时就生成创建时间和更新时间，删除ShippingMapper.xml中insert语句中添加创建时间和更新时间的部分，对应在sqlyog中要改变一下表结构
 
-![1633336572323](D:\JavaEnvironment\Git\workspace\mall\imgs\1633336572323.png)
+![1633336572323](./imgs/1633336572323.png)
 
 默认为 CURRENT_TIMESTAMP
 
@@ -1337,11 +1337,11 @@ localhost是域名，127.0.0.1是ip地址
 
 
 
-![1633336797086](D:\JavaEnvironment\Git\workspace\mall\imgs\1633336797086.png)
+![1633336797086](./imgs/1633336797086.png)
 
 这样能在insert后返回自增的id，就能在json中取得shippingId字段
 
-![1633337231253](D:\JavaEnvironment\Git\workspace\mall\imgs\1633337231253.png)
+![1633337231253](./imgs/1633337231253.png)
 
 
 
