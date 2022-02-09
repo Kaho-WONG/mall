@@ -40,7 +40,7 @@ public class ShippingServiceImpl implements IShippingService {
         BeanUtils.copyProperties(form,shipping);
         shipping.setUserId(uid);
         int row = shippingMapper.insert(shipping);//返回的是往数据库插入数据后影响的行数
-        if (row == 0){//服务端错误
+        if (row <= 0){//服务端错误
             return ResponseVo.error(ResponseEnum.ERROR);
         }
 
@@ -59,7 +59,7 @@ public class ShippingServiceImpl implements IShippingService {
     @Override
     public ResponseVo delete(Integer uid, Integer shippingId) {
         int row = shippingMapper.deleteByIdAndUid(uid, shippingId);
-        if (row == 0){//服务端错误
+        if (row <= 0){//服务端错误
             return ResponseVo.error(ResponseEnum.DELETE_SHIPPING_FAIL);
         }
         return ResponseVo.success();
@@ -79,14 +79,14 @@ public class ShippingServiceImpl implements IShippingService {
         shipping.setUserId(uid);
         shipping.setId(shippingId);
         int row = shippingMapper.updateByPrimaryKeySelective(shipping);
-        if (row == 0) {//服务端错误
+        if (row <= 0) {//服务端错误
             return ResponseVo.error(ResponseEnum.ERROR);
         }
         return ResponseVo.success();
     }
 
     /**
-     * 罗列出指定用户的一个或多个收货地址信息
+     * 罗列出指定用户的一个或多个收货地址信息，使用到分页插件
      * @param uid 用户id
      * @param pageNum 页码
      * @param pageSize 一页能容纳的条目数

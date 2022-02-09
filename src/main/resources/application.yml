@@ -9,11 +9,11 @@ spring:
     port: 6379
 mybatis:
   configuration:
-    map-underscore-to-camel-case: true #匹配数据库字段和pojo类属性
+    map-underscore-to-camel-case: true #匹配数据库字段(下划线)和pojo类属性(驼峰命名)
     #控制台日志配置，可以使mybatis在控制台输出sql语句，便于调试
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mappers/*.xml #识别resources下的mapper.xml文件
-#简化日志输出
+#简化控制台日志输出
 #logging:
 #  pattern:
 #    console: "[%thread] %-5level %logger{36} - %msg%n"

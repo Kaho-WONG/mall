@@ -6,6 +6,7 @@ import com.mars.mall.pojo.User;
  * 用户模块dao层
  */
 public interface UserMapper {
+
     int deleteByPrimaryKey(Integer id);//根据用户id删除用户
 
     /*

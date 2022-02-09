@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @description:
+ * @description: 商品列表模块controller层
  * @author: Mars
  * @create: 2021-10-02 13:49
  **/
@@ -21,6 +21,7 @@ public class ProductController {
     @Autowired
     private IProductService productService;
 
+    //默认展示第1页的10条数据
     @GetMapping("/products")
     public ResponseVo<PageInfo> list(@RequestParam(required = false) Integer categoryId,
                                      @RequestParam(required = false,defaultValue = "1") Integer pageNum,

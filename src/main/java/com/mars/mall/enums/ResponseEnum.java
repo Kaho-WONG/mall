@@ -3,7 +3,7 @@ package com.mars.mall.enums;
 import lombok.Getter;
 
 /**
- * json中的状态status枚举类
+ * json中的状态status使用的枚举类，包含一众错误状态码
  */
 @Getter
 public enum ResponseEnum {
@@ -33,6 +33,14 @@ public enum ResponseEnum {
     CART_PRODUCT_NOT_EXIST(15,"购物车内无此商品"),
 
     DELETE_SHIPPING_FAIL(16,"删除收货地址失败"),
+
+    SHIPPING_NOT_EXIST(17,"收货地址不存在"),
+
+    CART_SELECTED_IS_EMPTY(18,"请选择商品后下单"),
+
+    ORDER_NOT_EXIST(19,"订单不存在"),
+
+    ORDER_STATUS_ERROR(20,"订单状态有误"),
 
     ;
 

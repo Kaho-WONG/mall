@@ -83,7 +83,7 @@
                 <version>1.3.7</version>
 
                 <configuration>
-                    <overwrite>true</overwrite>
+                    <overwrite>true</overwrite><!--允许新生成的Mapper.xml文件覆盖旧的文件-->
                 </configuration>
             </plugin>
         </plugins>

@@ -2,6 +2,9 @@ package com.mars.mall.dao;
 
 import com.mars.mall.pojo.Order;
 
+
+import java.util.List;
+
 /**
  * 订单模块dao层
  */
@@ -17,4 +20,8 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    List<Order> selectByUid(Integer uid);
+
+    Order selectByOrderNo(Long orderNo);//通过订单号查询某个订单
 }

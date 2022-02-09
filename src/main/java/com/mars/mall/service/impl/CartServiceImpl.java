@@ -37,13 +37,13 @@ public class CartServiceImpl implements ICartService {
     private ProductMapper productMapper;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;//
+    private StringRedisTemplate redisTemplate; //提供了一系列操作Redis的方法
 
     private Gson gson = new Gson();//提供java对象序列化和反序列化功能
 
     /**
-     * 向购物车里添加一件商品编号为form中id的商品
-     * @param uid 存进redis中的键后缀编号
+     * 向购物车里添加一件商品编号为 form中的属性id的商品
+     * @param uid 存进redis中的键后缀编号("cart_%d"中的 %d)
      * @param form 包含添加一件商品进购物车的必要请求表单信息(productId、selected=true)
      * @return
      */
@@ -105,7 +105,7 @@ public class CartServiceImpl implements ICartService {
     public ResponseVo<CartVo> list(Integer uid) {
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
-        Map<String, String> entries = opsForHash.entries(redisKey);
+        Map<String, String> entries = opsForHash.entries(redisKey);//购物车编号为"cart_uid"的购物车存放的商品map集合(键为商品id，值为购物车商品对象cart)
 
         CartVo cartVo = new CartVo();//购物车vo对象,包含下面四个属性
         boolean selectAll = true;//默认全选
@@ -259,11 +259,13 @@ public class CartServiceImpl implements ICartService {
     }
 
     /**
-     * 供全选和全不选方法使用的私有方法，用于查询出包含购物车全部商品的列表
+     * 供全选和全不选方法使用的方法，用于查询出包含购物车全部商品的列表
+     * 也供订单模块create方法使用
      * @param uid
      * @return
      */
-    private List<Cart> listForCart(Integer uid){
+    @Override
+    public List<Cart> listForCart(Integer uid){
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
         Map<String, String> entries = opsForHash.entries(redisKey);

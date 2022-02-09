@@ -5,7 +5,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @description: 拦截器配置类，实现WebMvcConfigurer接口
+ * @description: 拦截器配置类，需要实现WebMvcConfigurer接口
  * @author: Mars
  * @create: 2021-09-29 21:30
  **/

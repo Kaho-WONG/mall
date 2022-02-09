@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * @author: Mars
  * @create: 2021-09-27 12:38
  **/
-@RestController
+@RestController //@RestController注解相当于@ResponseBody + @Controller合在一起的作用
 @Slf4j //在控制台打印日志
 public class UserController {
 
@@ -36,6 +36,13 @@ public class UserController {
      * @return
      * @RequestBody注解： 主要用来接收前端传递给后端的json字符串中的数据的(请求体中的数据的)；
      * 而最常用的使用请求体传参的无疑是POST请求了，所以使用@RequestBody接收数据时，一般都用POST方式进行提交。
+     *
+     *  * @Valid介绍及相关注解  主要用于表单验证，减轻了代码量
+     *  * 在Springboot启动器的web包下包含了javax.validation.Valid，所以无需添加多余的依赖
+     *  * 使用方式：
+     *  * 1.在相关的实体类(form)的相关字段添加用于充当验证条件的注解
+     *  * 2.在controller层的方法的要校验的参数上添加@Valid注解
+     *  * 3.编写全局异常捕捉类
      */
     @PostMapping("/user/register")
     public ResponseVo<User> register(@Valid @RequestBody UserRegisterForm userRegisterForm){
@@ -66,18 +73,19 @@ public class UserController {
 
         ResponseVo<User> userResponseVo = userService.login(userLoginForm.getUsername(), userLoginForm.getPassword());
 
-        //设置Session(服务端),前端使用cookie
+        //设置Session(服务端)，前端使用cookie：该Session键为常量，值为当前登录用户的对象实例user
         session.setAttribute(MallConst.CURRENT_USER,userResponseVo.getData());
         log.info("/login sessionId={}",session.getId());
 
         return userResponseVo;
     }
 
+    //TODO 保存用户登录信息更建议使用token权限验证+Redis保存用户
     /**
      * 获取当前登录的用户信息
      * @param session 保存用户数据的session
      * @return
-     * session保存在内存里，服务器重启或session过期都会使其失效，所以可以使用token+redis来保存：分布式session
+     * session保存在内存里，服务器重启或session过期都会使其失效，所以也可以使用token+redis来保存当前登录用户信息：分布式session
      */
     @GetMapping("/user")
     public ResponseVo<User> userInfo(HttpSession session){

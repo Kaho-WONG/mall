@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 订单详情类 —— 订单详情表
+ * 订单条目类 —— 订单条目表
  */
 @Data
 public class OrderItem {

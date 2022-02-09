@@ -24,6 +24,21 @@
     from mall_order_item
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByOrderNoSet" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_order_item
+    <where>
+      <if test="orderNoSet.size() > 0">
+        order_no in
+        <foreach collection="orderNoSet" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mall_order_item
     where id = #{id,jdbcType=INTEGER}
@@ -37,6 +52,25 @@
       #{productId,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{productImage,jdbcType=VARCHAR}, 
       #{currentUnitPrice,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{totalPrice,jdbcType=DECIMAL}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="batchInsert" parameterType="list">
+    insert into mall_order_item (user_id, order_no,
+                                 product_id, product_name, product_image,
+                                 current_unit_price, quantity, total_price)
+    values
+    <foreach collection="orderItemList" index="index" item="item" separator=",">
+      (
+      #{item.userId},
+      #{item.orderNo},
+      #{item.productId},
+      #{item.productName},
+      #{item.productImage},
+      #{item.currentUnitPrice},
+      #{item.quantity},
+      #{item.totalPrice}
+       )
+    </foreach>
   </insert>
   <insert id="insertSelective" parameterType="com.mars.mall.pojo.OrderItem">
     insert into mall_order_item

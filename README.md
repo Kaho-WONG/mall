@@ -19,6 +19,24 @@
 
 
 
+## 项目背景
+
+本项目主要是在我学习了Spring Boot、MyBatis、MySQL等一系列后端技术后，用于初步熟练企业级应用系统设计开发的前后端分离项目。
+
+
+
+## 项目架构图
+
+
+
+
+
+## 项目亮点
+
+
+
+
+
 ## 一、数据库设计
 
 ### 表设计
@@ -1289,41 +1307,67 @@ openid（微信）：公众号和小程序支付需要，appid不同，则获取
 
 ### 用户模块
 
-
-
-
-
-Controller接收参数时，前端如果发来的是url格式请求，controller方法的接收参数应该使用@RequestParam注解：
+需要注意：在进行用户模块单测，Controller接收参数时，前端如果发来的是url格式请求，controller方法的接收参数应该使用**@RequestParam**注解：
 
 ![1632718750295](./imgs/1632718750295.png)
 
-前端如果发来的是json格式的请求，controller方法的接收参数应该使用@RequestBody：
+前端如果发来的是json格式的请求，controller方法的接收参数应该使用**@RequestBody**：
 
 ![1632718863341](./imgs/1632718863341.png)
 
 
 
+**注意：**
+
+在使用 Postman 进行接口请求测试时，需要注意 **cookie 跨域**
+
+127.0.0.1 和 localhost 是不同的两个域，两个域访问时携带的 cookie 不同
+
+localhost 是域名，127.0.0.1 是ip地址
 
 
 
+### 商品模块
+
+PageHelper 分页插件：
+
+```xml
+<!--mybatis-pageHelper分页插件-->
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.2.13</version>
+</dependency>
+```
+
+> 具体的使用方法见代码
 
 
 
+### 购物车模块
+
+本项目的购物车模块是基于非关系型数据库 Redis 实现的，Redis 中的 key 是不同账户的购物车cart_1、cart_2...，value：购物车中的map结构（key：商品id，value：商品数据json）
+
+使用redis中的哈希表来存储购物车中的商品，使得查询存取购物车中某件商品更为迅速
+
+添加相关依赖：
+
+```xml
+<!--redis依赖-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+<!--用来把对象json序列化-->
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+</dependency>
+```
 
 
-注意 cookie 跨域
 
-127.0.0.1 和 localhost 是不同的两个域，两个域访问时携带的cookie不同
-
-localhost是域名，127.0.0.1是ip地址
-
-
-
-
-
-
-
-
+### 收货地址模块
 
 收货地址那里
 
@@ -1344,6 +1388,46 @@ localhost是域名，127.0.0.1是ip地址
 ![1633337231253](./imgs/1633337231253.png)
 
 
+
+
+
+### 订单模块
+
+
+
+#### rabbitmq的安装
+
+由于我的电脑是windows配置，在windows下安装使用rabbitmq步骤比较复杂，所以我使用的是虚拟机来跑这个消息队列，首先准备好一个centos 7.6版本的虚拟机（其他版本也可，注意兼容问题）
+
+在虚拟机中下载安装docker，具体安装步骤百度即可
+
+接着启动docker：`systemctl start docker`
+
+再输入下面这条命令安装rabbitmq：`docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.8.2-management`
+
+> 注意：这里安装的是带管理界面的rabbitmq，见 management
+
+第一次安装过程可能会漫长一点，当显示下面页面，即安装成功：
+
+![1642846913729](./imgs/1642846913729.png)
+
+现在可以去浏览器地址栏输入 “ip+客户端端口号” 测试一下是否成功启动rabbitmq，如我的虚拟机ip为 `192.168.200.128` ，客户端端口号为 15672，服务端端口号为 5672，如下图成功访问：
+
+![1642847110227](./imgs/1642847110227.png) 
+
+**初次登陆账户名和密码都是 guest**
+
+![1642847411374](./imgs/1642847411374.png)
+
+我们主要使用的是其队列功能~
+
+**注意：**
+
+由于上面那条命令（`docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.8.2-management`）运行后，命令行窗口会一直被占用，所以可以用下面这条命令启动rabbitmq，这样命令行窗口就可以使用：
+
+`docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:3.8.2-management`
+
+![1642847332265](./imgs/1642847332265.png)
 
 
 

@@ -9,7 +9,7 @@ import java.util.Date;
  * 用户类 —— 用户表
  */
 @Data
-@NoArgsConstructor
+@NoArgsConstructor //lombok注解：为类提供一个无参的构造方法
 public class User {
     private Integer id;//用户id
 

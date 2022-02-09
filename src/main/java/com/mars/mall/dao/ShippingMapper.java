@@ -4,6 +4,7 @@ import com.mars.mall.pojo.Shipping;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 收货地址模块dao层
@@ -25,4 +26,11 @@ public interface ShippingMapper {
                          @Param("shippingId") Integer shippingId);
 
     List<Shipping> selectByUid(Integer uid);
+
+    //服务于订单模块
+    Shipping selectByUidAndShippingId(@Param("uid") Integer uid,
+                                      @Param("shippingId") Integer shippingId);
+
+    //通过shippingId集合查询数据库Shipping表所有的收货地址Shipping
+    List<Shipping> selectByIdSet(@Param("idSet") Set idSet);
 }

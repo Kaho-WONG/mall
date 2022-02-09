@@ -32,6 +32,29 @@
     from mall_shipping
     where user_id = #{uid,jdbcType=INTEGER}
   </select>
+  <!--服务于订单模块-->
+  <select id="selectByUidAndShippingId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_shipping
+    where id = #{shippingId,jdbcType=INTEGER}
+    and user_id = #{uid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByIdSet" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_shipping
+    <where>
+      <if test="idSet.size() > 0">
+        id in
+        <foreach collection="idSet" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mall_shipping
     where id = #{id,jdbcType=INTEGER}

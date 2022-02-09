@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author: Mars
  * @create: 2021-09-29 19:12
  *
- * 耗时： http(请求微信qpi) > 磁盘 > 内存
+ * 耗时： http(请求微信api) > 磁盘 > 内存
  * mysql(内网+磁盘)
  **/
 @Service

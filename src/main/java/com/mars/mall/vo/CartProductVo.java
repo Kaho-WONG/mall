@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
- * @description: 购物车内的商品
+ * @description: 购物车内的一样商品
  * @author: Mars
  * @create: 2021-10-02 15:28
  **/

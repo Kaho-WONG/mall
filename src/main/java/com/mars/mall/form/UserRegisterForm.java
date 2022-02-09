@@ -6,12 +6,12 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @description: 表单，专门用一个form来作为传入controller的参数
- * UserForm 用来封装注册所用的参数
+ * UserRegisterForm 用来封装注册所用的参数
  * @author: Mars
  * @create: 2021-09-27 20:00
  *
  * 知识点：
- * @Valid介绍及相关注解  主要用于表单验证,减轻了代码量
+ * @Valid介绍及相关注解  主要用于表单验证，减轻了代码量
  * 在Springboot启动器的web包下包含了javax.validation.Valid所以无需添加多余的依赖
  * 使用方式：
  * 1.在相关的实体类(form)的相关字段添加用于充当验证条件的注解
