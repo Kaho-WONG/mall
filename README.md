@@ -1,9 +1,11 @@
 # mall
+> By Mars
+
 ## 项目简介
 
-该项目是一个基于SpringBoot的全模块电商平台和通用性支付系统的双系统项目，电商平台包含用户、订单、商品、购物车、收货地址等模块，使用MySQL作持久层，使用Redis存储用户购物车内的商品条目；支付系统采用了微信支付和支付宝开发文档的api进行开发，使用RabbitMQ实现支付的异步通知。 
+ 该项目是一个基于 Spring Boot 的全模块电商平台和通用性支付系统的双系统项目，电商平台包含用户、订单、商品、购物车、收货地址等模块，使用 MySQL 作存储层，使用 Redis 存储用户购物车内的商品条目；支付系统采用了微信支付和支付宝开发文档的 api 进行开发，使用 RabbitMQ 实现支付的异步通知；使用 Nginx 服务器实现反向代理和负载均衡。  
 
-本人主要负责后端代码的编写以及项目工程的测试、部署、发布~
+本人主要负责后端业务逻辑的编写，项目的功能测试、前后端联调、系统部署以及项目报告的编写。 
 
 
 
@@ -11,29 +13,37 @@
 
 - Java 1.8
 - **SpringBoot 2.1.7**
-- mybatis 2.1.0
+- MyBatis 2.1.0
 - Maven 3.8.1
-- mysql 5.7
-- rabbitmq 3.8.1
+- MySQL 5.7
+- RabbitMQ 3.8.1
 - IDEA Ultimate 2021.1
+- Nginx
+- best-pay-sdk
 
 
 
 ## 项目背景
 
-本项目主要是在我学习了Spring Boot、MyBatis、MySQL等一系列后端技术后，用于初步熟练企业级应用系统设计开发的前后端分离项目。
+本项目主要是我在学习了 Spring Boot、MyBatis、MySQL 等一系列后端技术后，用于初步了解企业级应用系统设计开发流程，学习如何分析开发文档并理解商城系统和支付系统开发场景的前后端分离项目。
 
 
 
 ## 项目架构图
 
-
+![](./imgs/系统架构.png)
 
 
 
 ## 项目亮点
 
+**1. 使用 Redis 来实现商城的购物车模块**
 
+**2.使用 MQ 实现订单创建消息的异步通知**
+
+**3. 使用 Nginx 实现反向代理和负载均衡**
+
+**4. 接入微信支付和支付宝支付构建支付系统**
 
 
 
@@ -51,7 +61,7 @@
 
 
 
-**表关系示意图：**
+**表关系示意图（E-R 图）：**
 
 <img src="./imgs/1632537720541.png" alt="1632537720541" style="zoom: 50%;" />
 
@@ -369,7 +379,7 @@ CREATE TABLE `mall_shipping` (
 
 INSERT INTO `mall_shipping` (`id`, `user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`)
 VALUES
-	(4,1,'廖师兄','010','18688888888','北京','北京市','海淀区','中关村慕课网大楼','100000','2000-01-22 14:26:25','2000-01-22 14:26:25');
+	(4,1,'Mars','010','18688888888','广东','深圳市','南山区','深圳大学','100000','2000-01-22 14:26:25','2001-04-22 14:26:25');
 
 DROP TABLE IF EXISTS `mall_user`;
 CREATE TABLE `mall_user` (
@@ -429,7 +439,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 <img src="./imgs/1632543486783.png" alt="1632543486783" style="zoom:33%;" />
 
-推荐使用第一种，找不到需要的 2.1.7 版本可以先用最新的版本，等工程构建好后进入pom.xml文件把`spring-boot-starter-parent`的版本改成`2.1.7.RELEASE` 。
+推荐使用第一种，找不到需要的 2.1.7 版本可以先用最新的版本，等工程构建好后进入 pom.xml 文件把`spring-boot-starter-parent`的版本改成`2.1.7.RELEASE` 。
 
 在 IDEA 中新建 mall 工程作为本项目的**商城后端系统**。
 
@@ -1249,8 +1259,6 @@ logging:
 
 ## 六、支付系统模块要点剖析
 
-### 1. 下单到支付流程剖析
-
 <img src="./imgs/1640325590012.png" alt="1640325590012" style="zoom:50%;" />
 
 
@@ -1263,47 +1271,35 @@ logging:
 
 ### 支付
 
-支付资质
+详情见微信和支付宝的支付开发文档：
+
+微信支付：https://pay.weixin.qq.com/wiki/doc/api/index.html
+
+支付宝支付：https://opendocs.alipay.com/home
 
 
 
-支付场景
-
-
-
-名词解释
+**名词解释**：
 
 appid：不是移动app的id，是应用id，一个应用有多个支付产品（建议小程序支付和App支付独立）
 
 openid（微信）：公众号和小程序支付需要，appid不同，则获取到的opinid就不同
 
+**注意**：
 
+**支付系统是一个独立的系统，与 mall 商城工程独立开来，有它自己专用的数据库/表**。
 
-**支付系统是一个独立的系统，与mall商城工程独立开来，有它自己专用的数据库/表**
+创建一个 **pay 工程**作为支付系统。
 
-创建一个 **pay 工程**作为支付系统
+这个支付系统比较小，只有一张表，所以还是用之前的数据库就行。
 
-这个支付系统比较小，只有一张表，所以还是用之前的数据库就行
-
-
-
-使用Github上开源的 **Pay-Group/best-pay-sdk**
-
-
-
-
-
-
-
-
+使用Github上开源的 微信/支付宝支付SDK： **Pay-Group/best-pay-sdk**
 
 
 
 
 
 ## 七、后端商城模块要点剖析
-
-
 
 ### 用户模块
 
@@ -1431,6 +1427,57 @@ PageHelper 分页插件：
 
 
 
+代码中需要在 application.yml 中进行配置
+
+![1644484905985](./imgs/1644484905985.png)
+
+下面测试pay工程中是否能成功使用MQ
+
+首先在 pom.xml 中引入配置
+
+```xml
+<!--MQ依赖-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+```
+
+在 test 目录下的 PayServiceTest.java 中编写测试代码：
+
+![1644485164622](./imgs/1644485164622.png)
+
+（payNotify 为mq队列名，稍后需要在MQ的客户端进行配置，hello 是发送的消息）
+
+接下来记得在虚拟机中启动docker，再启动rabbitmq，具体命令见上面讲述。
+
+进入rabbitmq的客户端进行消息队列配置：
+
+![1644485411331](./imgs/1644485411331.png)
+
+其他不用配置，添加成功如下图：
+
+![1644485460782](./imgs/1644485460782.png)
+
+运行测试方法，可见运行成功如下图：
+
+![1644485736219](./imgs/1644485736219.png)
+
+可在rabbitmq客户端看到消息队列中接收到从pay工程发送过去的消息：
+
+![1644485784557](./imgs/1644485784557.png)
+
+![1644485893244](./imgs/1644485893244.png)
+
+到这里，rabbitmq 就成功部署在 pay 工程中了。但是，下面需要做的是在mall工程中也进行 rabbitmq的配置，具体做法也是先引入依赖和在application.yml中配置mq信息，再编写一个消息队列监听类进行测试，看看mall工程运行后是否能接收到之前pay工程发送到 payNotify 队列之中的消息，具体可以用 Slf4j日志打印出来：
+
+![1644487249583](./imgs/1644487249583.png)
+
+下图即运行并接收消息成功的结果：
+
+![1644487133294](./imgs/1644487133294.png)
 
 
-## 八、项目部署发布
+
+
+
