@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: wjh1316156936
+    url: jdbc:mysql://localhost:3306/mall_db?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  rabbitmq:
+    addresses: 192.168.200.128
+    port: 5672
+    username: guest
+    password: guest
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #匹配数据库字段(下划线)和pojo类属性(驼峰命名)
+    #控制台日志配置，可以使mybatis在控制台输出sql语句，便于调试
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mappers/*.xml #识别resources下的mapper.xml文件
+#简化控制台日志输出
+#logging:
+#  pattern:
+#    console: "[%thread] %-5level %logger{36} - %msg%n"
+server:
+  servlet:
+    session:
+      timeout: 120 #设置session过期时间为120秒，默认最低限制是一分钟
+  port: 8081 #将mall工程的服务端口改为8081，避免与pay工程冲突

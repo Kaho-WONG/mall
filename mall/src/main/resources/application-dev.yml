@@ -7,6 +7,11 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+  rabbitmq:
+    addresses: 192.168.200.128
+    port: 5672
+    username: guest
+    password: guest
 mybatis:
   configuration:
     map-underscore-to-camel-case: true #匹配数据库字段(下划线)和pojo类属性(驼峰命名)
@@ -17,7 +22,8 @@ mybatis:
 #logging:
 #  pattern:
 #    console: "[%thread] %-5level %logger{36} - %msg%n"
-#server:
-#  servlet:
-#    session:
-#      timeout: 120 #设置session过期时间为120秒，默认最低限制是一分钟
+server:
+  servlet:
+    session:
+      timeout: 120 #设置session过期时间为120秒，默认最低限制是一分钟
+  port: 8081 #将mall工程的服务端口改为8081，避免与pay工程冲突

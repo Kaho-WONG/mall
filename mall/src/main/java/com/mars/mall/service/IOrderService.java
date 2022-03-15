@@ -18,4 +18,7 @@ public interface IOrderService {
     ResponseVo<OrderVo> detail(Integer uid,Long orderNo);
 
     ResponseVo cancel(Integer uid,Long orderNo);
+
+    void paid(Long orderNo);//修改订单状态为已付款
+
 }

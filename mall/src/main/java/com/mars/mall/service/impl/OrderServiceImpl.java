@@ -246,6 +246,29 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     /**
+     * 从MQ种接收到支付成功的消息后，根据消息中的订单号，修改订单状态为已付款
+     * @param orderNo
+     */
+    @Override
+    public void paid(Long orderNo) {
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if (order == null) {
+            throw new RuntimeException(ResponseEnum.ORDER_NOT_EXIST.getDesc() + "订单id:" + orderNo);
+        }
+        //只有[未付款]订单可以变成[已付款]
+        if (!order.getStatus().equals(OrderStatusEnum.NO_PAY.getCode())) {
+            throw new RuntimeException(ResponseEnum.ORDER_STATUS_ERROR.getDesc() + "订单id:" + orderNo);
+        }
+
+        order.setStatus(OrderStatusEnum.PAID.getCode());
+        order.setPaymentTime(new Date());
+        int row = orderMapper.updateByPrimaryKeySelective(order);
+        if (row <= 0) {
+            throw new RuntimeException("将订单更新为已支付状态失败，订单id:" + orderNo);
+        }
+    }
+
+    /**
      * 用于构造orderVo的方法
      * @param order 订单order对象
      * @param orderItemList 订单条目list
