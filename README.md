@@ -15,7 +15,7 @@
 
 > **什么是 B2C ？**
 >
-> [B2C](https://baike.baidu.com/item/B2C)中的 B 是 Business，即商业供应方（泛指企业），2（two）则是 to 的谐音，C 是 Consumer，即消费者。B2C 电子商务是按电子商务交易主体划分的一种[电子商务模式](https://baike.baidu.com/item/电子商务模式/10834158)，即表示企业对消费者的电子商务，具体是指通过信息网络以及电子数据信息的方式实现企业或商家机构与消费者之间的各种商务活动、交易活动、金融活动和综合服务活动，是消费者利用Internet直接参与经济活动的形式。 
+> [B2C](https://baike.baidu.com/item/B2C) 中的 B 是 Business，即商业供应方（泛指企业），2（two）则是 to 的谐音，C 是 Consumer，即消费者。B2C 电子商务是按电子商务交易主体划分的一种[电子商务模式](https://baike.baidu.com/item/电子商务模式/10834158)，即表示企业对消费者的电子商务，具体是指通过信息网络以及电子数据信息的方式实现企业或商家机构与消费者之间的各种商务活动、交易活动、金融活动和综合服务活动，是消费者利用 Internet 直接参与经济活动的形式。 
 
 本人主要负责后端业务逻辑的编写，项目的功能测试、前后端联调、系统部署以及项目报告的编写。 
 
@@ -29,9 +29,10 @@
 - Maven 3.8.1
 - MySQL 5.7
 - RabbitMQ 3.8.1
-- IDEA Ultimate 2021.1
+- 开发平台：IDEA Ultimate 2021.1
 - Nginx
-- best-pay-sdk
+- [best-pay-sdk](https://github.com/Pay-Group/best-pay-sdk)
+- 数据库管理软件：SQLyog（看个人喜好）
 
 
 
@@ -51,9 +52,9 @@
 
 **1. 使用 Redis 来实现商城的购物车模块**
 
-**2.使用 MQ 实现订单创建消息的异步通知**
+**2. 使用 MQ 实现支付与订单模块之间消息的异步通知**
 
-**3. 使用 Nginx 实现反向代理和负载均衡**
+**3. 使用 Nginx 进行动静分离、反向代理和负载均衡**
 
 **4. 接入微信支付和支付宝支付构建支付系统**
 
@@ -69,33 +70,37 @@
 - 表结构
 - 唯一索引
 - 单索引及组合索引
+- not null
 - 时间戳
 
 
 
 **表关系示意图（E-R 图）：**
 
-<img src="./imgs/1632537720541.png" alt="1632537720541" style="zoom: 50%;" />
+![](./imgs/1632537720541.png)
 
 
+
+> 下面仅仅粗略展示各表大致结构，完整建表 sql 在下面~
 
 **用户表结构：**
 
 ```sql
-CREATE TABLE `mall_user`(
- `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '用户表id',
- `username` VARCHAR(50) NOT NULL COMMENT '用户名',
- `password` VARCHAR(50) NOT NULL COMMENT '用户密码，MD5加密',
- `email` VARCHAR(50) DEFAULT NULL,
- `phone` VARCHAR(20) DEFAULT NULL,
- `question` VARCHAR(100) DEFAULT  NULL COMMENT '找回密码问题',
- `answer` VARCHAR(100) DEFAULT NULL COMMENT '找回密码答案',
- `role` INT(4) NOT NULL COMMENT '角色0-管理员，1-普通用户',
- `create_time` DATETIME NOT NULL COMMENT '创建时间',
- `update_time` DATETIME NOT NULL COMMENT '最后一次更新时间',
- PRIMARY KEY (`id`),
- UNIQUE KEY `user_name_unique` (`username`) USING BTREE
-) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `mall_user`;
+CREATE TABLE `mall_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户表id',
+  `username` varchar(50) NOT NULL COMMENT '用户名',
+  `password` varchar(50) NOT NULL COMMENT '用户密码，MD5加密',
+  `email` varchar(50) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `question` varchar(100) DEFAULT NULL COMMENT '找回密码问题',
+  `answer` varchar(100) DEFAULT NULL COMMENT '找回密码答案',
+  `role` int(4) NOT NULL COMMENT '角色0-管理员,1-普通用户',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_name_unique` (`username`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
 **分类表结构：**
@@ -116,21 +121,21 @@ CREATE TABLE `mall_category`(
 **产品表结构：**
 
 ```sql
-CREATE TABLE `mall_product`(
- `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
- `category_id` INT(11) NOT NULL COMMENT '分类id，对应mall_category表的id',
- `name` VARCHAR(100) NOT NULL COMMENT '商品名称',
- `subtitle` VARCHAR(200) DEFAULT NULL COMMENT '商品副标题',
- `main_images` VARCHAR(500) DEFAULT NULL COMMENT '产品主图，url相对地址',
- `sub_images` TEXT COMMENT '图片地址，json格式，扩展用',
- `detail` TEXT COMMENT '商品详情',
- `price` DECIMAL(20,2) NOT NULL COMMENT '价格，单位-元保留两位小数',
- `stock` INT(11) NOT NULL COMMENT '库存数量',
- `status` INT(6) DEFAULT '1' COMMENT '商品状态，1-在售 2-下架 3-删除',
- `create_time` DATETIME DEFAULT NULL COMMENT '创建时间',
- `update_time` DATETIME DEFAULT NULL COMMENT '更新时间',
- PRIMARY KEY (`id`),
-) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+CREATE TABLE `mall_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
+  `category_id` int(11) NOT NULL COMMENT '分类id,对应mall_category表的主键',
+  `name` varchar(100) NOT NULL COMMENT '商品名称',
+  `subtitle` varchar(200) DEFAULT NULL COMMENT '商品副标题',
+  `main_image` varchar(500) DEFAULT NULL COMMENT '产品主图,url相对地址',
+  `sub_images` text COMMENT '图片地址,json格式,扩展用',
+  `detail` text COMMENT '商品详情',
+  `price` decimal(20,2) NOT NULL COMMENT '价格,单位-元保留两位小数',
+  `stock` int(11) NOT NULL COMMENT '库存数量',
+  `status` int(6) DEFAULT '1' COMMENT '商品状态.1-在售 2-下架 3-删除',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
 **支付信息表结构：**
@@ -152,84 +157,103 @@ CREATE TABLE `mall_pay_info`(
 **订单表结构：**
 
 ```sql
-CREATE TABLE `mall_order`(
- `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
- `order_no` BIGINT(20) DEFAULT NULL COMMENT '订单号',
- `user_id` INT(11) DEFAULT NULL COMMENT '用户id',
- `shipping_id` INT(11) DEFAULT NULL,
- `payment` DECIMAL(20,2) DEFAULT NULL COMMENT '实际付款金额，单位是元',
- `payment_type` INT(4) DEFAULT NULL COMMENT '支付类型，1-在线支付',
- `postage` INT(10) DEFAULT NULL COMMENT '运费，单位是元',
- `status` INT(10) DEFAULT NULL COMMENT '订单状态:0-已取消-10-未付款',
- `payment_time` DATETIME DEFAULT NULL COMMENT '支付时间',
- `send_time` DATETIME DEFAULT NULL COMMENT '发货时间',
- `end_time` DATETIME DEFAULT NULL COMMENT '交易完成时间',
- `close_time` DATETIME DEFAULT NULL COMMENT '交易关闭时间',
- `create_time` DATETIME DEFAULT NULL COMMENT '创建时间',
- `update_time` DATETIME DEFAULT NULL COMMENT '更新时间',
- PRIMARY KEY (`id`),
- UNIQUE KEY `order_no_index` (`order_no`) USING BTREE
-) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+CREATE TABLE `mall_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
+  `order_no` bigint(20) DEFAULT NULL COMMENT '订单号',
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `shipping_id` int(11) DEFAULT NULL,
+  `payment` decimal(20,2) DEFAULT NULL COMMENT '实际付款金额,单位是元,保留两位小数',
+  `payment_type` int(4) DEFAULT NULL COMMENT '支付类型,1-在线支付',
+  `postage` int(10) DEFAULT NULL COMMENT '运费,单位是元',
+  `status` int(10) DEFAULT NULL COMMENT '订单状态:0-已取消-10-未付款，20-已付款，40-已发货，50-交易成功，60-交易关闭',
+  `payment_time` datetime DEFAULT NULL COMMENT '支付时间',
+  `send_time` datetime DEFAULT NULL COMMENT '发货时间',
+  `end_time` datetime DEFAULT NULL COMMENT '交易完成时间',
+  `close_time` datetime DEFAULT NULL COMMENT '交易关闭时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_no_index` (`order_no`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
 **订单明细表结构：**
 
 ```sql
-CREATE TABLE `mall_order_item`(
- `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '订单子表id',
- `user_id` INT(11) DEFAULT NULL,
- `order_no` BIGINT(20) DEFAULT NULL,
- `product_id` INT(11) DEFAULT NULL COMMENT '商品id',
- `product_name` VARCHAR(100) DEFAULT NULL COMMENT '商品名称',
- `product_image` VARCHAR(500) DEFAULT NULL COMMENT '商品图片地址',
- `current_unit_price` DECIMAL(20,2) DEFAULT NULL COMMENT '生成订单时商品的单价',
- `quantity` INT(10) DEFAULT NULL COMMENT '商品数量',
- `total_price` DECIMAL(20,2) DEFAULT NULL COMMENT '商品总价，单位是元',
- `create_time` DATETIME DEFAULT NULL,
- `update_time` DATETIME DEFAULT NULL,
- PRIMARY KEY (`id`),
- KEY `order_no_index` (`order_no`) USING BTREE,
- KEY `order_no_user_id_index` (`user_id`,`order_no`) USING BTREE
-) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+CREATE TABLE `mall_order_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单子表id',
+  `user_id` int(11) DEFAULT NULL,
+  `order_no` bigint(20) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL COMMENT '商品id',
+  `product_name` varchar(100) DEFAULT NULL COMMENT '商品名称',
+  `product_image` varchar(500) DEFAULT NULL COMMENT '商品图片地址',
+  `current_unit_price` decimal(20,2) DEFAULT NULL COMMENT '生成订单时的商品单价，单位是元,保留两位小数',
+  `quantity` int(10) DEFAULT NULL COMMENT '商品数量',
+  `total_price` decimal(20,2) DEFAULT NULL COMMENT '商品总价,单位是元,保留两位小数',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_no_index` (`order_no`) USING BTREE,
+  KEY `order_no_user_id_index` (`user_id`,`order_no`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
 **收货地址表结构：**
 
 ```sql
-CREATE TABLE `mall_shipping`(
- `id` INT(11) NOT NULL AUTO_INCREMENT,
- `user_id` INT(11) DEFAULT NULL COMMENT '用户id',
- `receiver_name` VARCHAR(20) DEFAULT NULL COMMENT '收货姓名',
- `receiver_phone` VARCHAR(20) DEFAULT NULL COMMENT '收货固定电话',
- `receiver_mobile` VARCHAR(20) DEFAULT NULL COMMENT '收货移动电话',
- `receiver_province` VARCHAR(20) DEFAULT NULL COMMENT '省份',
- `receiver_city` VARCHAR(20) DEFAULT NULL COMMENT '城市',
- `receiver_district` VARCHAR(20) DEFAULT NULL COMMENT '区/县',
- `receiver_address` VARCHAR(200) DEFAULT NULL COMMENT '详细地址',
- `receiver_zip` VARCHAR(6) DEFAULT NULL COMMENT '邮编',
- `create_time` DATETIME DEFAULT NULL,
- `update_time` DATETIME DEFAULT NULL,
+CREATE TABLE `mall_shipping` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `receiver_name` varchar(20) DEFAULT NULL COMMENT '收货姓名',
+  `receiver_phone` varchar(20) DEFAULT NULL COMMENT '收货固定电话',
+  `receiver_mobile` varchar(20) DEFAULT NULL COMMENT '收货移动电话',
+  `receiver_province` varchar(20) DEFAULT NULL COMMENT '省份',
+  `receiver_city` varchar(20) DEFAULT NULL COMMENT '城市',
+  `receiver_district` varchar(20) DEFAULT NULL COMMENT '区/县',
+  `receiver_address` varchar(200) DEFAULT NULL COMMENT '详细地址',
+  `receiver_zip` varchar(6) DEFAULT NULL COMMENT '邮编',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+**支付信息表：**
+
+```sql
+CREATE TABLE `mall_pay_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `order_no` bigint(20) NOT NULL COMMENT '订单号',
+  `pay_platform` int(10) DEFAULT NULL COMMENT '支付平台:1-支付宝,2-微信',
+  `platform_number` varchar(200) DEFAULT NULL COMMENT '支付流水号',
+  `platform_status` varchar(20) DEFAULT NULL COMMENT '支付状态',
+  `pay_amount` decimal(20,2) NOT NULL COMMENT '支付金额',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `uqe_order_no` (`order_no`),
+  UNIQUE KEY `uqe_platform_number` (`platform_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 ```
 
 
 
-**主键索引**
+**TIPS：**
 
-默认会对主键创建聚簇索引，在工程中主要是几张表中的 `XX_id` 字段。
+**1. 主键索引**
 
-**唯一索引**
+默认会对主键创建聚簇索引，在工程中主要是几张表中的 `XX_id` 字段，同时声明了自增属性，无需我们手动赋值。
 
-![1632542444122](./imgs/1632542444122.png)
+**2. 唯一索引**
 
-**单索引及组合索引**
+保证数据唯一性，同时提高在数据库的检索效率。
 
-通过 B+ 树提高针对特定字段的查询速度。
+**3. 单索引及组合索引**
 
-![1632542483974](./imgs/1632542483974.png)
+通过 B+ 树提高针对特定字段的查询速度。组合索引符合最左前缀原则，减少创建的索引数量，降低数据库维护成本。
 
-**时间戳**
+**4. 时间戳**
 
 便于查业务问题
 
@@ -416,7 +440,7 @@ VALUES
 -- 新增“支付金额”字段 xxxx年xx月xx日
 alter table mall_pay_info add pay_amount decimal(20,2) NOT NULL COMMENT '支付金额' after platform_status;
 
--- 视频7-13修改mall_pay_info，修改后如下
+-- 后续修改mall_pay_info，修改后如下
 DROP TABLE IF EXISTS `mall_pay_info`;
 CREATE TABLE `mall_pay_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -433,13 +457,15 @@ CREATE TABLE `mall_pay_info` (
   UNIQUE KEY `uqe_platform_number` (`platform_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
--- 视频8-3修改mall_user表字段结构
+-- 后续修改mall_user表字段结构
 alter table mall_user modify create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间';
 alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间';
 
 ```
 
-将以上 mall.sql 粘贴到数据库软件（SQLyog）中执行，建表成功如图：
+
+
+将上述 `mall.sql` 直接粘贴到数据库软件（SQLyog）中执行，建表成功如图：
 
 ![1632543228098](./imgs/1632543228098.png)
 
