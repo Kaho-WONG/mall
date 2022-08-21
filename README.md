@@ -50,9 +50,9 @@
 
 ## 项目亮点
 
-**1. 使用 Redis 作为购物车缓存，提高购物车中热点数据的读写效率； **
+**1. 使用 Redis 作为购物车缓存，提高购物车中热点数据的读写效率；**
 
-**2. 使用 RabbitMQ 向商城订单模块推送支付消息，实现了订单模块和支付系统的解耦以及交易结果的异步通知； **
+**2. 使用 RabbitMQ 向商城订单模块推送支付消息，实现了订单模块和支付系统的解耦以及交易结果的异步通知；**
 
 **3. 使用 Nginx 进行动静分离、反向代理和负载均衡；**
 
@@ -479,7 +479,9 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 创建SpringBoot项目有如下三种创建方法：
 
-<img src="./imgs/1632543486783.png" alt="1632543486783" style="zoom:33%;" />
+1. Intellij IDEA Ultimate
+2. Spring 官网
+3. Maven
 
 推荐使用第一种，找不到需要的 2.1.7 版本可以先用最新的版本，等工程构建好后进入 pom.xml 文件把`spring-boot-starter-parent`的版本改成`2.1.7.RELEASE` 。
 
