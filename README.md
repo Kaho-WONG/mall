@@ -1,7 +1,7 @@
 # 前后端分离的 B2C 电商平台+支付系统
-> @author：Kaho WONG
+> - @author：Kaho WONG
 >
-> @create：2021-09	
+> - @create：2021-09
 
 ## 前言
 
@@ -563,7 +563,7 @@ alter table mall_user modify update_time datetime NOT NULL DEFAULT CURRENT_TIMES
 
 然后进入test目录下的MallApplicationTests，将里面的 import 改成：`import org.junit.Test;`
 
-![1632549289277](C:\Users\王嘉豪\AppData\Roaming\Typora\typora-user-images\1632549289277.png)
+![1632549289277](./imgs/1632549289277.png)
 
 > 如果不进行改动，等会启动项目时会报错 “java: 程序包org.junit.jupiter.api不存在”
 
